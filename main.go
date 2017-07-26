@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"image"
 	_ "image/gif"
@@ -10,31 +11,42 @@ import (
 )
 
 type page struct {
-	Title string //имена переменных должны совпадать с тем, что мы написали выше!
-	Msg   string //и переменные обязательно должны быть публичными!
+	Title string
+	Msg   string
+}
+
+func indexpage(w http.ResponseWriter, p map[string]string) {
+	w.Header().Set("Content-type", "text/html")
+	t, okt := template.ParseFiles("index.html")
+	if okt != nil {
+		fmt.Println(okt.Error())
+		panic(okt)
+		return
+	}
+	t.Execute(w, &page{Title: p["title"], Msg: p["msg"]})
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-type", "text/html")
-
 	title := r.URL.Path[len("/"):]
+	maps := make(map[string]string)
 
 	if title != "exec/" {
-		t, okt := template.ParseFiles("index.html")
-		if okt != nil {
-			panic(okt)
-		}
-		t.Execute(w, &page{Title: "Convert Image"})
+		maps["title"] = "Convert Image"
+		indexpage(w, maps)
 	} else {
-		imgfile, fhead, _ := r.FormFile("imgfile")
+		imgfile, fhead, ok := r.FormFile("imgfile")
+		if ok != nil {
+			maps["title"] = title
+			maps["msg"] = ok.Error()
+			indexpage(w, maps)
+			return
+		}
 
 		img, ext, ok := image.Decode(imgfile)
 		if ok != nil {
-			t, okt := template.ParseFiles("index.html")
-			if okt != nil {
-				panic(okt)
-			}
-			t.Execute(w, &page{Title: "Convert Image", Msg: ok.Error()})
+			maps["title"] = title
+			maps["msg"] = ok.Error()
+			indexpage(w, maps)
 			return
 		}
 		w.Header().Set("Content-type", "image/jpeg")
