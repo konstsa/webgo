@@ -51,7 +51,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Header().Set("Content-type", "image/jpeg")
 		w.Header().Set("Content-Disposition", "filename=\""+fhead.Filename+"."+ext+"\"")
-		jpeg.Encode(w, img, &jpeg.Options{0})
+		jpeg.Encode(w, img, &jpeg.Options{100})
 	}
 
 }
