@@ -13,7 +13,10 @@ type page struct {
 func index(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "text/html")
 
-	t, _ := template.ParseFiles("/index.html")
+	t, ok := template.ParseFiles("index.html")
+	if ok != nil {
+		panic(ok)
+	}
 	t.Execute(w, &page{Title: "Just page", Msg: "Hello World"})
 
 }
