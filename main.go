@@ -1,29 +1,25 @@
 package main
 
 import (
-	"net/http"
 	"html/template"
-
-
+	"net/http"
 )
 
 type page struct {
-	Title string	//имена переменных должны совпадать с тем, что мы написали выше!
-	Msg string		//и переменные обязательно должны быть публичными!
+	Title string //имена переменных должны совпадать с тем, что мы написали выше!
+	Msg   string //и переменные обязательно должны быть публичными!
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "text/html")
 
-
-	t, _ :=template.ParseFiles("templates/index.html")
+	t, _ := template.ParseFiles("/index.html")
 	t.Execute(w, &page{Title: "Just page", Msg: "Hello World"})
-
 
 }
 
 func main() {
 
 	http.HandleFunc("/", index)
-	http.ListenAndServe(":3000", nil)
+	http.ListenAndServe(":80", nil)
 }
