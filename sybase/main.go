@@ -22,7 +22,7 @@ func main() {
 	}
 
 	// Run query with multiple return rows
-		rows, err := db.Query("select count(1) from tCounter")
+		rows, err := db.Query("select count(1) from oper..tCounter")
 		if err != nil {
 			log.Fatalf("Select failed1: %s", err)
 		}
