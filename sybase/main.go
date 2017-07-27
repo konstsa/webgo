@@ -5,6 +5,7 @@ import (
      _ "github.com/denisenkom/go-mssqldb"
 	"database/sql"
 	"log"
+
 )
 
 func main() {
@@ -12,16 +13,16 @@ func main() {
 
 
 
-	db, err := sql.Open("mssql", "server=10.1.108.203;port=5000;user=test;password=123456;database=P48TestAB")
+
+	db, err := sql.Open("mssql", "server=10.1.108.203;port=5000;user id=test;password=123456;database=oper")
 	if err != nil {
 		fmt.Println(err)
-		//log.Fatalf("Unable to connect to db: %s", err)
 	}else{
 		fmt.Println("norm")
 	}
 
 	// Run query with multiple return rows
-		rows, err := db.Query("select count(1) from oper..tCounter")
+		rows, err := db.Query("select count(1) from tCounter")
 		if err != nil {
 			log.Fatalf("Select failed1: %s", err)
 		}
